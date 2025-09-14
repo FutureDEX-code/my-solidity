@@ -1,16 +1,16 @@
 name: Solidity Static Analysis
 
-on: #触发条件
+on: # 触发条件
   push:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
 
-jobs: #作业
+jobs: # 作业
   analyze:
     runs-on: ubuntu-latest
     
-    steps: #步骤
+    steps: # 步骤
       - name: Checkout code
         uses: actions/checkout@v3
         
@@ -24,27 +24,31 @@ jobs: #作业
           python -m pip install --upgrade pip
           pip install slither-analyzer
           
-      - name: Install Node.js and Solhint
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
           
-      - name: Install Solhint
-        run: npm install -g solhint
-        
-      # 新增步骤：安装 Chainlink 和 OpenZeppelin 依赖
       - name: Install dependencies
         run: |
           npm init -y
-          npm install @chainlink/contracts@0.8 --save-exact
+          npm install @chainlink/contracts@0.8 --save-exact  # 使用特定版本
           npm install @openzeppelin/contracts@5.0.2 --save-exact
-          # 将依赖复制到 contracts 目录（或调整导入路径）
-          mkdir -p contracts/node_modules
-          cp -r node_modules/@chainlink node_modules/@openzeppelin contracts/node_modules/
-          npm audit fix --force || true
+          # 清理缓存以避免冲突
+          npm cache clean --force
+          
+      - name: Install Solc
+        uses: ethereum/solc-installer@v2
+        with:
+          version: 0.8.19  # 匹配你的合约 pragma 版本，调整为实际版本
+
+      - name: Install Solhint
+        run: npm install -g solhint
         
       - name: Run Slither analysis
-        run: slither . --fail-low --exclude-informational
-        
+        run: |
+          slither . --fail-low --exclude-informational --solc-remaps "@chainlink/contracts/=node_modules/@chainlink/contracts/" --solc-version 0.8.19
+          # 确保与你的合约版本匹配
+
       - name: Run Solhint analysis
         run: solhint 'contracts/**/*.sol'
