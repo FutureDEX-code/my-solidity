@@ -36,7 +36,7 @@ jobs: #作业
       - name: Install dependencies
         run: |
           npm init -y
-          npm install @chainlink/contracts@1.1.1 --save-exact
+          npm install @chainlink/contracts@0.8 --save-exact
           npm install @openzeppelin/contracts@5.0.2 --save-exact
           # 将依赖复制到 contracts 目录（或调整导入路径）
           mkdir -p contracts/node_modules
