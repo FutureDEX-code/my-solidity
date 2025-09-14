@@ -41,7 +41,7 @@ jobs: #作业
           # 将依赖复制到 contracts 目录（或调整导入路径）
           mkdir -p contracts/node_modules
           cp -r node_modules/@chainlink node_modules/@openzeppelin contracts/node_modules/
-          npm audit fix
+          npm audit fix --force
         
       - name: Run Slither analysis
         run: slither . --fail-low --exclude-informational
