@@ -36,12 +36,12 @@ jobs: #作业
       - name: Install dependencies
         run: |
           npm init -y
-          npm install @chainlink/contracts@0.8
-          npm install @openzeppelin/contracts@4.9.3
+          npm install @chainlink/contracts@1.1.1 --save-exact
+          npm install @openzeppelin/contracts@5.0.2 --save-exact
           # 将依赖复制到 contracts 目录（或调整导入路径）
           mkdir -p contracts/node_modules
           cp -r node_modules/@chainlink node_modules/@openzeppelin contracts/node_modules/
-          npm audit fix --force
+          npm audit fix --force || true
         
       - name: Run Slither analysis
         run: slither . --fail-low --exclude-informational
