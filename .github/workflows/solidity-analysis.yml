@@ -32,7 +32,7 @@ jobs: # 作业
       - name: Install dependencies
         run: |
           npm init -y
-          npm install @chainlink/contracts@0.8 --save-exact  # 使用特定版本
+          npm install @chainlink/contracts@1.2.0 --save-exact  # 使用特定版本
           npm install @openzeppelin/contracts@5.0.2 --save-exact
           # 清理缓存以避免冲突
           npm cache clean --force
@@ -40,7 +40,7 @@ jobs: # 作业
       - name: Install Solc
         uses: ethereum/solc-installer@v2
         with:
-          version: 0.8.19  # 匹配你的合约 pragma 版本，调整为实际版本
+          version: 0.8.25  # 匹配你的合约 pragma 版本，调整为实际版本
 
       - name: Install Solhint
         run: npm install -g solhint
