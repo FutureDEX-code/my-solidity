@@ -32,6 +32,16 @@ jobs: #作业
       - name: Install Solhint
         run: npm install -g solhint
         
+      # 新增步骤：安装 Chainlink 和 OpenZeppelin 依赖
+      - name: Install dependencies
+        run: |
+          npm init -y
+          npm install @chainlink/contracts@0.8
+          npm install @openzeppelin/contracts@4.9.3
+          # 将依赖复制到 contracts 目录（或调整导入路径）
+          mkdir -p contracts/node_modules
+          cp -r node_modules/@chainlink node_modules/@openzeppelin contracts/node_modules/
+        
       - name: Run Slither analysis
         run: slither . --fail-low --exclude-informational
         
